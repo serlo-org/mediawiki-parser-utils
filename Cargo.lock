@@ -35,17 +35,17 @@ dependencies = [
 ]
 
 [[package]]
-name = "mfnf_commons"
+name = "mwparser_utils"
 version = "0.1.0"
 dependencies = [
  "mediawiki_parser 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "mfnf_derive 0.1.0",
+ "mwparser_utils_derive 0.1.0",
  "serde 1.0.37 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.37 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
-name = "mfnf_derive"
+name = "mwparser_utils_derive"
 version = "0.1.0"
 dependencies = [
  "proc-macro2 0.3.6 (registry+https://github.com/rust-lang/crates.io-index)",
