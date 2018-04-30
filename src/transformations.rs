@@ -1,9 +1,15 @@
+//! Utility transformations.
+
 use mediawiki_parser::transformations::*;
 use mediawiki_parser::*;
 use util::{extract_plain_text, find_arg};
 
-/// Convert list templates (MFNF) to mediawiki lists.
-pub fn convert_template_list(mut root: Element, _settings: ()) -> TResult {
+/// Convert list templates to mediawiki lists.
+pub fn convert_template_list(root: Element) -> TResult {
+    convert_template_list_rec(root, ())
+}
+
+fn convert_template_list_rec(mut root: Element, _settings: ()) -> TResult {
     if let Element::Template(ref mut template) = root {
         let template_name = extract_plain_text(&template.name).trim().to_lowercase();
         if ["list", "liste"].contains(&template_name.as_str()) {
@@ -41,7 +47,7 @@ pub fn convert_template_list(mut root: Element, _settings: ()) -> TResult {
                             continue
                         }
                         let sublist = arg.value.remove(0);
-                        return recurse_inplace(&convert_template_list, sublist, ());
+                        return recurse_inplace(&convert_template_list_rec, sublist, ());
                     }
                 }
             }
@@ -50,8 +56,8 @@ pub fn convert_template_list(mut root: Element, _settings: ()) -> TResult {
                 position: template.position.to_owned(),
                 content: list_content,
             });
-            return recurse_inplace(&convert_template_list, list, ());
+            return recurse_inplace(&convert_template_list_rec, list, ());
         }
     }
-    return recurse_inplace(&convert_template_list, root, ())
+    return recurse_inplace(&convert_template_list_rec, root, ())
 }
