@@ -193,7 +193,7 @@
     - id: proof
       names: ["proof", "beweis"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
 - id: AlternativeProof
   names: [":Mathe für Nicht-Freaks: Vorlage:Alternativer Beweis"]
@@ -208,7 +208,7 @@
     - id: proof
       names: ["proof", "beweis"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
 - id: ProofSummary
   names: [":Mathe für Nicht-Freaks: Vorlage:Beweiszusammenfassung"]
@@ -223,7 +223,7 @@
     - id: summary
       names: ["summary", "zusammenfassung"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
 - id: Solution
   names: [":Mathe für Nicht-Freaks: Vorlage:Lösung"]
@@ -239,3 +239,23 @@
       names: ["solution", "lösung"]
       priority: required
       predicate: is_text_only_paragraph
+
+- id: ProofStep
+  names: [":Mathe für Nicht-Freaks: Vorlage:Beweisschritt"]
+  description: One step of a proof.
+  format: block
+  attributes:
+    - id: name
+      names: ["name"]
+      priority: required
+      predicate: is_plain_text
+    - id: goal
+      names: ["goal", "ziel"]
+      priority: required
+      predicate: is_text_only_paragraph
+    - id: step
+      names: ["step", "beweisschritt"]
+      priority: required
+      predicate: is_text_only_paragraph
+
+
