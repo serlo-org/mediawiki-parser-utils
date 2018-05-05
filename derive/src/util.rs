@@ -6,14 +6,14 @@ use std::fs;
 use std::path::{Path};
 use syn::{Attribute, DeriveInput, Ident, Lit, Meta};
 
-pub fn parse_derive(ast: DeriveInput) -> (Ident, String) {
+pub fn parse_derive(ast: &DeriveInput) -> (Ident, String) {
     let name = ast.ident;
 
     let grammar: Vec<&Attribute> = ast.attrs
         .iter()
         .filter(|attr| match attr.interpret_meta() {
             Some(Meta::NameValue(name_value)) =>
-                name_value.ident.to_string() == "spec",
+                name_value.ident == "spec",
             _ => false
         })
         .collect();

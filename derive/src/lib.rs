@@ -36,17 +36,19 @@ fn check_template(template: &SpecTemplate) -> (Ident, Vec<LitStr>, Ident, LitStr
     }
 
     if template.names.is_empty() {
-        panic!("{:?}: templates must have at least one name!");
+        panic!("{:?}: templates must have at least one name!",
+               template.identifier);
     }
 
     for child in &template.attributes {
-        if child.identifier.chars().fold(false, |acc, c| acc || c.is_uppercase()) {
+        if child.identifier.chars().any(|c| c.is_uppercase()) {
             panic!("{:?}: attribute identifiers should be lowercase!",
                 child.identifier)
         }
 
         if child.names.is_empty() {
-            panic!("{:?}: attributes must have at least one name!");
+            panic!("{:?}: attributes must have at least one name!",
+                   child.identifier);
         }
     }
 
@@ -230,7 +232,7 @@ fn implement_templates(templates: &[SpecTemplate]) -> Vec<Tokens> {
     templates.iter().map(|template| {
 
         let (name, names, _, _) = check_template(template);
-        let description = template.description.split("\n")
+        let description = template.description.split('\n')
             .map(|l| LitStr::new(&l, Span::call_site()));
         let attribute_impls = template.attributes.iter().map(|attr| {
             let attr_id: Ident = Ident::from(attr.identifier.clone());
@@ -261,9 +263,9 @@ fn implement_templates(templates: &[SpecTemplate]) -> Vec<Tokens> {
 pub fn create_template_spec(input: TokenStream) -> TokenStream {
 
     let ast: DeriveInput = syn::parse(input).unwrap();
-    let (_name, path) = parse_derive(ast);
+    let (_name, path) = parse_derive(&ast);
 
-    let root = env::var("CARGO_MANIFEST_DIR").unwrap_or(".".into());
+    let root = env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| ".".into());
     let path = Path::new(&root).join("src/").join(&path);
     let file_name = match path.file_name() {
         Some(file_name) => file_name,
