@@ -10,8 +10,6 @@ extern crate mwparser_utils_derive;
 #[macro_use]
 pub mod util;
 pub mod transformations;
-#[macro_use]
-mod spec_utils;
 mod spec;
 
 pub use spec::*;
