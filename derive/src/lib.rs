@@ -283,66 +283,118 @@ pub fn create_template_spec(input: TokenStream) -> TokenStream {
     let template_parsing = implement_template_parsing(&templates);
 
     let implementation = quote! {
-        /// Specifies wether a template represents a logical unit (`Block`)
-        /// or simpler markup (`Inline`).
-        #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-        pub enum Format {
-            Block,
-            Inline
-        }
+        /// Types and utils used in the documentation.
+        pub mod spec_meta {
+            /// Specifies wether a template represents a logical unit (`Block`)
+            /// or simpler markup (`Inline`).
+            #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+            pub enum Format {
+                Block,
+                Inline
+            }
 
-        /// Template attributes can have different priorities.
-        #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
-        pub enum Priority {
-            Required,
-            Optional
-        }
+            /// Template attributes can have different priorities.
+            #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+            pub enum Priority {
+                Required,
+                Optional
+            }
 
-        /// A function to determine wether a given element is allowed.
-        type Predicate = Fn(&[Element]) -> bool + Sync;
+            /// Represents failure of a predicate check.
+            pub struct PredError<'e> {
+                pub tree: Option<&'e Element>,
+                pub cause: String,
+            }
 
-        /// Represents a (semantic) template.
-        #[derive(Clone, Serialize)]
-        pub struct TemplateSpec<'p> {
-            pub names: Vec<String>,
-            pub description: String,
-            pub format: Format,
-            pub attributes: Vec<AttributeSpec<'p>>,
-        }
+            /// Result of a predicate check.
+            pub type PredResult<'e> = Result<(), PredError<'e>>;
+            /// A function to determine wether a given element is allowed.
+            pub type Predicate = Fn(&[Element]) -> PredResult + Sync;
 
-        /// Represents the specification of an attribute (or argument) of a template.
-        #[derive(Clone, Serialize)]
-        pub struct AttributeSpec<'p> {
-            pub names: Vec<String>,
-            pub priority: Priority,
-            #[serde(skip)]
-            pub predicate: &'p Predicate,
-            pub predicate_name: String,
-        }
+            /// Checks a predicate for a given input tree.
+            struct TreeChecker<'path, 'e> {
+                pub path: Vec<&'path Element>,
+                pub result: PredResult<'e>,
+            }
 
-        impl<'p> TemplateSpec<'p> {
-            /// Returns the default / preferred name of this template.
-            /// This is the first name in the list.
-            pub fn default_name(&self) -> &str {
-                self.names.first().unwrap()
+            impl <'e, 'p: 'e> Traversion<'e, &'p Predicate> for TreeChecker<'e, 'e> {
+
+                path_methods!('e);
+
+                fn work_vec(
+                    &mut self,
+                    root: &'e [Element],
+                    predicate: &'p Predicate,
+                    _: &mut io::Write
+                ) -> io::Result<bool> {
+                    if self.result.is_err() {
+                        return Ok(false)
+                    }
+                    self.result = (predicate)(root);
+                    Ok(true)
+                }
+            }
+
+            /// Checks a predicate recursively.
+            pub fn always<'e, 'p: 'e>(root: &'e [Element], predicate: &'p Predicate)
+                -> PredResult<'e>
+            {
+                let mut checker = TreeChecker {
+                    path: vec![],
+                    result: Ok(()),
+                };
+                checker.result = Ok(());
+                checker.run_vec(&root, predicate, &mut vec![])
+                    .expect("error checking predicate!");
+                checker.result
+            }
+
+
+            /// Represents a (semantic) template.
+            #[derive(Clone, Serialize)]
+            pub struct TemplateSpec<'p> {
+                pub names: Vec<String>,
+                pub description: String,
+                pub format: Format,
+                pub attributes: Vec<AttributeSpec<'p>>,
+            }
+
+            /// Represents the specification of an attribute (or argument) of a template.
+            #[derive(Clone, Serialize)]
+            pub struct AttributeSpec<'p> {
+                pub names: Vec<String>,
+                pub priority: Priority,
+                #[serde(skip)]
+                pub predicate: &'p Predicate,
+                pub predicate_name: String,
+            }
+
+            impl<'p> TemplateSpec<'p> {
+                /// Returns the default / preferred name of this template.
+                /// This is the first name in the list.
+                pub fn default_name(&self) -> &str {
+                    self.names.first().unwrap()
+                }
+            }
+
+            impl<'p> AttributeSpec<'p> {
+                /// Returns the default / preferred name of this attribute.
+                /// This is the first name in the list.
+                pub fn default_name(&self) -> &str {
+                    self.names.first().unwrap()
+                }
+            }
+
+            /// Represents a concrete value of a template attribute.
+            #[derive(Debug, Clone, PartialEq, Serialize)]
+            pub struct Attribute<'e> {
+                pub name: String,
+                pub priority: Priority,
+                pub value: &'e [Element],
             }
         }
 
-        impl<'p> AttributeSpec<'p> {
-            /// Returns the default / preferred name of this attribute.
-            /// This is the first name in the list.
-            pub fn default_name(&self) -> &str {
-                self.names.first().unwrap()
-            }
-        }
-
-        /// Represents a concrete value of a template attribute.
-        #[derive(Debug, Clone, PartialEq, Serialize)]
-        pub struct Attribute<'e> {
-            pub name: String,
-            pub priority: Priority,
-            pub value: &'e [Element],
-        }
+        use spec_meta::*;
 
         /// Get the specification of a specific template, if it exists.
         pub fn spec_of<'p>(name: &str) -> Option<TemplateSpec<'p>> {
