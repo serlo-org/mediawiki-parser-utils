@@ -59,5 +59,5 @@ fn convert_template_list_rec(mut root: Element, _settings: ()) -> TResult {
             return recurse_inplace(&convert_template_list_rec, list, ());
         }
     }
-    return recurse_inplace(&convert_template_list_rec, root, ())
+    recurse_inplace(&convert_template_list_rec, root, ())
 }
