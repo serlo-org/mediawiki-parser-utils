@@ -89,12 +89,10 @@ pub fn is_theorem_paragraph(elems: &[Element]) -> PredResult {
                         })
                     }
                 },
-                Element::Gallery(_)
                 | Element::Heading(_)
                 | Element::Table(_)
                 | Element::TableRow(_)
                 | Element::TableCell(_)
-                | Element::InternalReference(_)
                 => return Err(PredError {
                     tree: Some(elem),
                     cause: "This markup is not allowed in proofs!".into()

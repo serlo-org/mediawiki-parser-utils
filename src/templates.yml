@@ -1,5 +1,6 @@
 # template specification for "Mathe für Nicht-Freaks"
 
+
 - id: Formula
   names: ["formula", "formel"]
   description: Make some math distinct from the surrounding text.
@@ -83,7 +84,7 @@
     - id: theorem
       names: ["theorem", "satz"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
     - id: explanation
       names: ["explanation", "erklärung"]
@@ -93,7 +94,7 @@
     - id: solutionprocess
       names: ["solutionprocess", "lösungsweg"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
     - id: summary
       names: ["summary", "zusammenfassung"]
@@ -103,7 +104,7 @@
     - id: proof
       names: ["proof", "beweis"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
 - id: Example
   names: [":Mathe für Nicht-Freaks: Vorlage:Beispiel"]
@@ -148,17 +149,17 @@
     - id: solutionprocess
       names: ["solutionprocess", "lösungsweg"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
     - id: solution
       names: ["solution", "lösung"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
     - id: proof
       names: ["proof", "beweis"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
 - id: Hint
   names: [":Mathe für Nicht-Freaks: Vorlage:Hinweis"]
@@ -238,7 +239,7 @@
     - id: solution
       names: ["solution", "lösung"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_theorem_paragraph
 
 - id: ProofStep
   names: [":Mathe für Nicht-Freaks: Vorlage:Beweisschritt"]
