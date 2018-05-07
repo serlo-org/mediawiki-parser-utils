@@ -248,7 +248,7 @@
   attributes:
     - id: name
       names: ["name"]
-      priority: required
+      priority: optional
       predicate: is_plain_text
     - id: goal
       names: ["goal", "ziel"]
