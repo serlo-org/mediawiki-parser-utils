@@ -4,6 +4,7 @@ use mediawiki_parser::*;
 use std::collections::HashMap;
 use std::process::Command;
 use std::sync::Mutex;
+use std::path::PathBuf;
 
 /// generates getters and setters for a path member of a traversion.
 #[macro_export]
@@ -59,7 +60,7 @@ pub trait TexChecker {
 
 #[derive(Debug)]
 pub struct CachedTexChecker {
-    pub texvccheck_path: String,
+    pub texvccheck_path: PathBuf,
     pub max_size: usize,
     pub cache: Mutex<HashMap<String, TexResult>>,
 }
@@ -77,7 +78,7 @@ impl CachedTexChecker {
         self.texvccheck_path = path.into();
     }
 
-    pub fn get_path(&self) -> &str {
+    pub fn get_path(&self) -> &PathBuf {
         &self.texvccheck_path
     }
 }
