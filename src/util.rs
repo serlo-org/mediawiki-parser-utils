@@ -66,9 +66,9 @@ pub struct CachedTexChecker {
 }
 
 impl CachedTexChecker {
-    pub fn new(path: &str, size: usize) -> CachedTexChecker {
+    pub fn new(path: &PathBuf, size: usize) -> CachedTexChecker {
         CachedTexChecker {
-            texvccheck_path: path.into(),
+            texvccheck_path: path.clone(),
             max_size: size,
             cache: Mutex::new(HashMap::with_capacity(size)),
         }
