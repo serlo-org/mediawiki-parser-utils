@@ -2,7 +2,7 @@
 
 use mediawiki_parser::transformations::*;
 use mediawiki_parser::*;
-use util::{extract_plain_text, find_arg};
+use util::{extract_plain_text, find_arg, TexResult, TexChecker};
 
 /// Convert list templates to mediawiki lists.
 pub fn convert_template_list(root: Element) -> TResult {
@@ -60,4 +60,61 @@ fn convert_template_list_rec(mut root: Element, _settings: ()) -> TResult {
         }
     }
     recurse_inplace(&convert_template_list_rec, root, ())
+}
+
+/// Normalize math formulas with texvccheck
+pub fn normalize_math_formulas(mut root: Element, checker: &TexChecker) -> TResult {
+
+    if let Element::Formatted(ref mut formatted) = root {
+        if formatted.markup == MarkupType::Math {
+            match check_formula(&formatted.content, &formatted.position, checker) {
+                e @ Element::Text(_) => {
+                    formatted.content.clear();
+                    formatted.content.push(e);
+                },
+                e => return Ok(e),
+            }
+        }
+    }
+    recurse_inplace(&normalize_math_formulas, root, checker)
+}
+
+/// Check a Tex formula, return normalized version or error
+fn check_formula(
+    content: &[Element],
+    position: &Span,
+    checker: &TexChecker
+) -> Element {
+    if content.len() != 1 {
+        return Element::Error(Error {
+            message: "A formula must have exactly one content element!".into(),
+            position: position.clone(),
+        })
+    }
+    let checked_formula = match content[0] {
+        Element::Text(ref text) => {
+            checker.check(&text.text)
+        },
+        _ => return Element::Error(Error {
+            message: "A formula must only have text as content!".into(),
+            position: position.clone(),
+        })
+    };
+    let cause = match checked_formula {
+        TexResult::Ok(content) => {
+            return Element::Text(Text {
+                position: position.clone(),
+                text: content,
+            });
+        },
+        TexResult::UnknownFunction(func) => format!("unknown latex function `{}`!", func),
+        TexResult::SyntaxError => "latex syntax error!".into(),
+        TexResult::LexingError => "latex lexer error!".into(),
+        TexResult::UnknownError => "unknown latex error!".into(),
+    };
+
+    Element::Error(Error {
+        message: cause,
+        position: position.clone(),
+    })
 }
