@@ -15,6 +15,11 @@ pub fn filename_to_make(input: &str) -> String {
         .replace("/", "@SLASH@")
         .replace("'", "@SQUOTE@")
         .replace('"', "@DQUOTE@")
+        .replace('*', "@STAR@")
+        .replace("=", "@EQ@")
+        .replace("$", "@DOLLAR@")
+        .replace("#", "@SHARP@")
+        .replace("%", "@PERC@")
 }
 
 /// generates getters and setters for a path member of a traversion.
