@@ -6,6 +6,17 @@ use std::process::Command;
 use std::sync::Mutex;
 use std::path::PathBuf;
 
+/// Convert a filename to a make-friedly format.
+pub fn filename_to_make(input: &str) -> String {
+    input.replace(" ", "_")
+        .replace(":", "@COLON@")
+        .replace("(", "@LBR@")
+        .replace(")", "@RBR@")
+        .replace("/", "@SLASH@")
+        .replace("'", "@SQUOTE@")
+        .replace('"', "@DQUOTE@")
+}
+
 /// generates getters and setters for a path member of a traversion.
 #[macro_export]
 macro_rules! path_methods {
