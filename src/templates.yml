@@ -84,7 +84,7 @@
     - id: indent_mode
       names: ["eingerückt"]
       priority: optional
-      predicate: is_plain_text
+      predicate: is_negative_switch
 
 - id: Theorem
   names: [":Mathe für Nicht-Freaks: Vorlage:Satz"]

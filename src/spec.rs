@@ -56,6 +56,31 @@ pub fn is_plain_text(elems: &[Element]) -> PredResult {
     always(elems, &shallow)
 }
 
+/// The argument is a switch and the conten of the argument can only be "nein"
+/// ("nein" is German for "no").
+pub fn is_negative_switch(elems: &[Element]) -> PredResult {
+    let elem = unwrap_singleton_list(elems);
+
+    let result = elem.and_then(|ref elem| match elem {
+        Element::Paragraph(Paragraph{ ref content, ..})
+            => unwrap_singleton_list(content),
+        x => Some(&x),
+    }).map(|ref elem| match elem {
+        Element::Text(Text{ ref text, ..}) => text == "nein",
+        _ => false
+    });
+
+    if result.unwrap_or(false) {
+        return Ok(());
+    } else {
+        return Err(PredError {
+            tree: elem,
+            cause: "The content of this argument is only allowed \
+                    to be \"nein\".".into(),
+        });
+    };
+}
+
 fn get_template_spec(template: &Template) -> Result<TemplateSpec, PredError> {
     let name = extract_plain_text(&template.name);
     if let Some(spec) = spec_of(&name) {
@@ -138,3 +163,11 @@ pub fn is_text_only_paragraph(elems: &[Element]) -> PredResult {
     always(elems, &shallow)
 }
 
+/// Unwraps a list with only one element and returns None when either the list
+/// has more than one element or when the list is empty.
+pub fn unwrap_singleton_list<T>(list: &[T]) -> Option<&T> {
+    return match list {
+        [ref a] => Some(a),
+        _ => None,
+    }
+}
