@@ -1,7 +1,7 @@
 # template specification for "Mathe für Nicht-Freaks"
 
 - id: Formula
-  names: ["formula", "formel"]
+  names: ["Formel"]
   description: |
     A math environment for formulas to  distinct them from the surrounding
     text.
@@ -14,7 +14,7 @@
       description: The formula defined in this environment.
 
 - id: Anchor
-  names: ["anchor", "anker"]
+  names: ["Anker"]
   description: |
     Anchors mark reference points in headings.
 
@@ -41,7 +41,7 @@
         The name of the article which covers more deeply the current content.
 
 - id: Important
-  names: ["important", "-"]
+  names: ["-"]
   description: Environment for highlighting an important block of text.
   format: block
   attributes:
