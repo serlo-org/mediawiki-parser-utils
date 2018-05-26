@@ -1,21 +1,21 @@
 # template specification for "Mathe für Nicht-Freaks"
 
-
 - id: Formula
   names: ["formula", "formel"]
-  description: Make some math distinct from the surrounding text.
+  description: |
+    A math environment for formulas to  distinct them from the surrounding
+    text.
   format: inline
   attributes:
     - id: formula
       names: ["1", "formel"]
       priority: required
-      # name of the predicate function
       predicate: is_math_tag
 
 - id: Anchor
   names: ["anchor", "anker"]
   description: |
-    Anchors mark reference points in an article.
+    Anchors mark reference points in headings.
 
     The argument this anchor is given should be the same as used for
     the reference later.
@@ -28,7 +28,7 @@
 
 - id: Mainarticle
   names: [":Mathe für Nicht-Freaks: Vorlage:Hauptartikel"]
-  description: Link to an article covering this sections more deeply.
+  description: Link to an article covering this section more deeply.
   format: inline
   attributes:
     - id: article
@@ -38,7 +38,7 @@
 
 - id: Important
   names: ["important", "-"]
-  description: Highlight an important block of text.
+  description: Environment for highlighting an important block of text.
   format: block
   attributes:
     - id: content
@@ -48,7 +48,8 @@
 
 - id: Definition
   names: [":Mathe für Nicht-Freaks: Vorlage:Definition"]
-  description: A definition block.
+  description: |
+    A definition which defines a mathematical concept given by `title`.
   format: block
   attributes:
     - id: title
@@ -63,7 +64,10 @@
 
 - id: Question
   names: [":Mathe für Nicht-Freaks: Vorlage:Frage"]
-  description: Template for a question with an answer.
+  description: |
+    A question with an answer. `kind` defines the type of the question and
+    `indent_mode` specifies whether the answer shall be indented (default mode)
+    or not.
   format: block
   attributes:
     - id: question
@@ -88,7 +92,7 @@
 
 - id: Theorem
   names: [":Mathe für Nicht-Freaks: Vorlage:Satz"]
-  description: A theorem block.
+  description: A mathematical theorem.
   format: block
   attributes:
     - id: title
@@ -123,7 +127,7 @@
 
 - id: Example
   names: [":Mathe für Nicht-Freaks: Vorlage:Beispiel"]
-  description: An example block.
+  description: A mathematical example.
   format: block
   attributes:
     - id: title
@@ -178,7 +182,7 @@
 
 - id: Hint
   names: [":Mathe für Nicht-Freaks: Vorlage:Hinweis"]
-  description: A hint.
+  description: A hint for the reader.
   format: block
   attributes:
     - id: hint
@@ -188,7 +192,7 @@
 
 - id: Warning
   names: [":Mathe für Nicht-Freaks: Vorlage:Warnung"]
-  description: A warning.
+  description: A warning for the reader.
   format: block
   attributes:
     - id: warning
@@ -198,7 +202,7 @@
 
 - id: Proof
   names: [":Mathe für Nicht-Freaks: Vorlage:Beweis"]
-  description: A proof.
+  description: A proof for a theorem.
   format: block
   attributes:
     - id: title
@@ -229,7 +233,7 @@
 
 - id: AlternativeProof
   names: [":Mathe für Nicht-Freaks: Vorlage:Alternativer Beweis"]
-  description: An alternative proof.
+  description: An alternative proof for a theorem.
   format: block
   attributes:
     - id: title
@@ -244,7 +248,7 @@
 
 - id: ProofSummary
   names: [":Mathe für Nicht-Freaks: Vorlage:Beweiszusammenfassung"]
-  description: A summary of a proof.
+  description: A summary of a proof which explains how it works.
   format: block
   attributes:
     - id: title
