@@ -186,6 +186,22 @@
       priority: required
       predicate: is_theorem_paragraph
 
+- id: SolutionProcess
+  names: [":Mathe für Nicht-Freaks: Vorlage:Lösungsweg"]
+  description: >
+    It shows the way how a solution or a proof for an exercise can be found.
+  format: block
+  attributes:
+    - id: title
+      names: ["title", "titel"]
+      priority: optional
+      predicate: is_text_only_paragraph
+
+    - id: proof
+      names: ["solutionprocess", "lösungsweg"]
+      priority: required
+      predicate: is_theorem_paragraph
+
 - id: AlternativeProof
   names: [":Mathe für Nicht-Freaks: Vorlage:Alternativer Beweis"]
   description: An alternative proof.
