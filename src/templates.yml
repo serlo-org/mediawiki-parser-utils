@@ -11,6 +11,7 @@
       names: ["1", "formel"]
       priority: required
       predicate: is_math_tag
+      description: The formula defined in this environment.
 
 - id: Anchor
   names: ["anchor", "anker"]
@@ -25,6 +26,7 @@
       names: ["1"]
       priority: required
       predicate: is_plain_text
+      description: The label of this reference.
 
 - id: Mainarticle
   names: [":Mathe für Nicht-Freaks: Vorlage:Hauptartikel"]
@@ -35,6 +37,8 @@
       names: ["1"]
       priority: required
       predicate: is_plain_text
+      description: |
+        The name of the article which covers more deeply the current content.
 
 - id: Important
   names: ["important", "-"]
@@ -45,6 +49,7 @@
       names: ["1", "content"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The important content.
 
 - id: Definition
   names: [":Mathe für Nicht-Freaks: Vorlage:Definition"]
@@ -56,11 +61,13 @@
       names: ["title", "titel"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: Name of the mathematical concept which is defined.
 
     - id: definition
       names: ["definition"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The definition of the mathematical content.
 
 - id: Question
   names: [":Mathe für Nicht-Freaks: Vorlage:Frage"]
@@ -74,21 +81,25 @@
       names: ["frage"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The question.
 
     - id: answer
       names: ["antwort"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The answer of the question.
 
     - id: kind
       names: ["typ"]
       priority: optional
       predicate: is_plain_text
+      description: The kind of the question.
 
     - id: indent_mode
       names: ["eingerückt"]
       priority: optional
       predicate: is_negative_switch
+      description: Defines whether the answer shall be indented.
 
 - id: Theorem
   names: [":Mathe für Nicht-Freaks: Vorlage:Satz"]
@@ -99,31 +110,37 @@
       names: ["title", "titel"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: Name of the mathematcial theorem.
 
     - id: theorem
       names: ["theorem", "satz"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The content of the theorem.
 
     - id: explanation
       names: ["explanation", "erklärung"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: An explanation for the mathematical theorem.
 
     - id: solutionprocess
       names: ["solutionprocess", "lösungsweg"]
       priority: optional
       predicate: is_theorem_paragraph
+      description: The thought process how to find the proof of this theorem.
 
     - id: summary
       names: ["summary", "zusammenfassung"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: A summery for the proof of this theorem.
 
     - id: proof
       names: ["proof", "beweis"]
       priority: optional
       predicate: is_theorem_paragraph
+      description: The proof for this theorem.
 
 - id: Example
   names: [":Mathe für Nicht-Freaks: Vorlage:Beispiel"]
@@ -134,11 +151,13 @@
       names: ["title", "titel"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: A name for this example.
 
     - id: example
       names: ["example", "beispiel"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The content for this example.
 
 - id: Exercise
   names: [":Mathe für Nicht-Freaks: Vorlage:Aufgabe"]
@@ -149,36 +168,47 @@
       names: ["title", "titel"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: A name for this excersise.
 
     - id: exercise
       names: ["exercise", "aufgabe"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The content for this exercise.
 
     - id: explanation
       names: ["explanation", "erklärung"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: An additional explanation for this exercise.
 
     - id: summary
       names: ["summary", "zusammenfassung"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: A summary for the proof or the solution for this exercise.
 
     - id: solutionprocess
       names: ["solutionprocess", "lösungsweg"]
       priority: optional
       predicate: is_theorem_paragraph
+      description: |
+        The thought process for finding the proof or the solution of this
+        exercise.
 
     - id: solution
       names: ["solution", "lösung"]
       priority: optional
       predicate: is_theorem_paragraph
+      description:
+        The solution for this exercise.
 
     - id: proof
       names: ["proof", "beweis"]
       priority: optional
       predicate: is_theorem_paragraph
+      description:
+        The proof for this exercise.
 
 - id: Hint
   names: [":Mathe für Nicht-Freaks: Vorlage:Hinweis"]
@@ -189,6 +219,7 @@
       names: ["1"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The content of this hint.
 
 - id: Warning
   names: [":Mathe für Nicht-Freaks: Vorlage:Warnung"]
@@ -199,6 +230,7 @@
       names: ["1"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The content of this warning.
 
 - id: Proof
   names: [":Mathe für Nicht-Freaks: Vorlage:Beweis"]
@@ -209,11 +241,13 @@
       names: ["title", "titel"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: The name of the theorem which will be proved.
 
     - id: proof
       names: ["proof", "beweis"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The content of the proof.
 
 - id: SolutionProcess
   names: [":Mathe für Nicht-Freaks: Vorlage:Lösungsweg"]
@@ -225,11 +259,14 @@
       names: ["title", "titel"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: |
+        The title of the theorem or exercise which is going to be proved.
 
     - id: proof
       names: ["solutionprocess", "lösungsweg"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The thought process for finding the solution.
 
 - id: AlternativeProof
   names: [":Mathe für Nicht-Freaks: Vorlage:Alternativer Beweis"]
@@ -240,11 +277,13 @@
       names: ["title", "titel"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: The name of the proof which is going to be proved.
 
     - id: proof
       names: ["proof", "beweis"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The content of the proof.
 
 - id: ProofSummary
   names: [":Mathe für Nicht-Freaks: Vorlage:Beweiszusammenfassung"]
@@ -255,11 +294,13 @@
       names: ["title", "titel"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: The name of the theorem which is proved.
 
     - id: summary
       names: ["summary", "zusammenfassung"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The content of the proof summary.
 
 - id: Solution
   names: [":Mathe für Nicht-Freaks: Vorlage:Lösung"]
@@ -270,11 +311,13 @@
       names: ["title", "titel"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: The title of the exercise this solution has.
 
     - id: solution
       names: ["solution", "lösung"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The content of the solution.
 
 - id: ProofStep
   names: [":Mathe für Nicht-Freaks: Vorlage:Beweisschritt"]
@@ -285,14 +328,19 @@
       names: ["name"]
       priority: optional
       predicate: is_plain_text
+      description: The name of the proof step.
+
     - id: goal
       names: ["goal", "ziel"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The goal for this proof step.
+
     - id: step
       names: ["step", "beweisschritt"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The proof for the specified goal.
 
 - id: ProofByCases
   names: [":Mathe für Nicht-Freaks: Vorlage:Fallunterscheidung"]
@@ -303,55 +351,73 @@
       names: ["fall1"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The goal of the 1st case.
+
     - id: proof1
       names: ["beweis1"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The proof of the 1st case.
 
     - id: case2
       names: ["fall2"]
       priority: required
       predicate: is_text_only_paragraph
+      description: The proof of the 2nd case.
+
     - id: proof2
       names: ["beweis2"]
       priority: required
       predicate: is_theorem_paragraph
+      description: The proof of the 2nd case.
 
     - id: case3
       names: ["fall3"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: The proof of the 3rd case.
+
     - id: proof3
       names: ["beweis3"]
       priority: optional
       predicate: is_theorem_paragraph
+      description: The proof of the 3rd case.
 
     - id: case4
       names: ["fall4"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: The proof of the 4th case.
+
     - id: proof4
       names: ["beweis4"]
       priority: optional
       predicate: is_theorem_paragraph
+      description: The proof of the 4th case.
 
     - id: case5
       names: ["fall5"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: The proof of the 5th case.
+
     - id: proof5
       names: ["beweis5"]
       priority: optional
       predicate: is_theorem_paragraph
+      description: The proof of the 5th case.
 
     - id: case6
       names: ["fall6"]
       priority: optional
       predicate: is_text_only_paragraph
+      description: The proof of the 6th case.
+
     - id: proof6
       names: ["beweis6"]
       priority: optional
       predicate: is_theorem_paragraph
+      description: The proof of the 6th case.
 
 - id: Navigation
   names: ["#invoke:Mathe für Nicht-Freaks/Seite"]
@@ -364,3 +430,6 @@
       names: ["1"]
       priority: required
       predicate: is_navigation_spec
+      description: |
+        The kind of the navigational element. "oben" for the header and "unten"
+        for the footer.
