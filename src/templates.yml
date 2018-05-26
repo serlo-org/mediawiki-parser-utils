@@ -8,7 +8,7 @@
   format: inline
   attributes:
     - id: formula
-      names: ["1", "formel"]
+      names: ["1"]
       priority: required
       predicate: is_math_tag
       description: The formula defined in this environment.
@@ -46,7 +46,7 @@
   format: block
   attributes:
     - id: content
-      names: ["1", "content"]
+      names: ["1"]
       priority: required
       predicate: is_text_only_paragraph
       description: The important content.
@@ -58,7 +58,7 @@
   format: block
   attributes:
     - id: title
-      names: ["title", "titel"]
+      names: ["titel"]
       priority: optional
       predicate: is_text_only_paragraph
       description: Name of the mathematical concept which is defined.
@@ -107,37 +107,37 @@
   format: block
   attributes:
     - id: title
-      names: ["title", "titel"]
+      names: ["titel"]
       priority: optional
       predicate: is_text_only_paragraph
       description: Name of the mathematcial theorem.
 
     - id: theorem
-      names: ["theorem", "satz"]
+      names: ["satz"]
       priority: required
       predicate: is_theorem_paragraph
       description: The content of the theorem.
 
     - id: explanation
-      names: ["explanation", "erklärung"]
+      names: ["erklärung"]
       priority: optional
       predicate: is_text_only_paragraph
       description: An explanation for the mathematical theorem.
 
     - id: solutionprocess
-      names: ["solutionprocess", "lösungsweg"]
+      names: ["lösungsweg"]
       priority: optional
       predicate: is_theorem_paragraph
       description: The thought process how to find the proof of this theorem.
 
     - id: summary
-      names: ["summary", "zusammenfassung"]
+      names: ["zusammenfassung"]
       priority: optional
       predicate: is_text_only_paragraph
       description: A summery for the proof of this theorem.
 
     - id: proof
-      names: ["proof", "beweis"]
+      names: ["beweis"]
       priority: optional
       predicate: is_theorem_paragraph
       description: The proof for this theorem.
@@ -148,13 +148,13 @@
   format: block
   attributes:
     - id: title
-      names: ["title", "titel"]
+      names: ["titel"]
       priority: optional
       predicate: is_text_only_paragraph
       description: A name for this example.
 
     - id: example
-      names: ["example", "beispiel"]
+      names: ["beispiel"]
       priority: required
       predicate: is_text_only_paragraph
       description: The content for this example.
@@ -165,31 +165,31 @@
   format: block
   attributes:
     - id: title
-      names: ["title", "titel"]
+      names: ["titel"]
       priority: optional
       predicate: is_text_only_paragraph
       description: A name for this excersise.
 
     - id: exercise
-      names: ["exercise", "aufgabe"]
+      names: ["aufgabe"]
       priority: required
       predicate: is_text_only_paragraph
       description: The content for this exercise.
 
     - id: explanation
-      names: ["explanation", "erklärung"]
+      names: ["erklärung"]
       priority: optional
       predicate: is_text_only_paragraph
       description: An additional explanation for this exercise.
 
     - id: summary
-      names: ["summary", "zusammenfassung"]
+      names: ["zusammenfassung"]
       priority: optional
       predicate: is_text_only_paragraph
       description: A summary for the proof or the solution for this exercise.
 
     - id: solutionprocess
-      names: ["solutionprocess", "lösungsweg"]
+      names: ["lösungsweg"]
       priority: optional
       predicate: is_theorem_paragraph
       description: |
@@ -197,14 +197,14 @@
         exercise.
 
     - id: solution
-      names: ["solution", "lösung"]
+      names: ["lösung"]
       priority: optional
       predicate: is_theorem_paragraph
       description:
         The solution for this exercise.
 
     - id: proof
-      names: ["proof", "beweis"]
+      names: ["beweis"]
       priority: optional
       predicate: is_theorem_paragraph
       description:
@@ -238,13 +238,13 @@
   format: block
   attributes:
     - id: title
-      names: ["title", "titel"]
+      names: ["titel"]
       priority: optional
       predicate: is_text_only_paragraph
       description: The name of the theorem which will be proved.
 
     - id: proof
-      names: ["proof", "beweis"]
+      names: ["beweis"]
       priority: required
       predicate: is_theorem_paragraph
       description: The content of the proof.
@@ -256,14 +256,14 @@
   format: block
   attributes:
     - id: title
-      names: ["title", "titel"]
+      names: ["titel"]
       priority: optional
       predicate: is_text_only_paragraph
       description: |
         The title of the theorem or exercise which is going to be proved.
 
     - id: proof
-      names: ["solutionprocess", "lösungsweg"]
+      names: ["lösungsweg"]
       priority: required
       predicate: is_theorem_paragraph
       description: The thought process for finding the solution.
@@ -274,13 +274,13 @@
   format: block
   attributes:
     - id: title
-      names: ["title", "titel"]
+      names: ["titel"]
       priority: optional
       predicate: is_text_only_paragraph
       description: The name of the proof which is going to be proved.
 
     - id: proof
-      names: ["proof", "beweis"]
+      names: ["beweis"]
       priority: required
       predicate: is_theorem_paragraph
       description: The content of the proof.
@@ -291,13 +291,13 @@
   format: block
   attributes:
     - id: title
-      names: ["title", "titel"]
+      names: ["titel"]
       priority: optional
       predicate: is_text_only_paragraph
       description: The name of the theorem which is proved.
 
     - id: summary
-      names: ["summary", "zusammenfassung"]
+      names: ["zusammenfassung"]
       priority: required
       predicate: is_theorem_paragraph
       description: The content of the proof summary.
@@ -308,13 +308,13 @@
   format: block
   attributes:
     - id: title
-      names: ["title", "titel"]
+      names: ["titel"]
       priority: optional
       predicate: is_text_only_paragraph
       description: The title of the exercise this solution has.
 
     - id: solution
-      names: ["solution", "lösung"]
+      names: ["lösung"]
       priority: required
       predicate: is_theorem_paragraph
       description: The content of the solution.
@@ -331,13 +331,13 @@
       description: The name of the proof step.
 
     - id: goal
-      names: ["goal", "ziel"]
+      names: ["ziel"]
       priority: required
       predicate: is_text_only_paragraph
       description: The goal for this proof step.
 
     - id: step
-      names: ["step", "beweisschritt"]
+      names: ["beweisschritt"]
       priority: required
       predicate: is_text_only_paragraph
       description: The proof for the specified goal.
