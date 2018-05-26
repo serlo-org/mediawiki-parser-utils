@@ -61,6 +61,31 @@
       priority: required
       predicate: is_text_only_paragraph
 
+- id: Question
+  names: [":Mathe für Nicht-Freaks: Vorlage:Frage"]
+  description: Template for a question with an answer.
+  format: block
+  attributes:
+    - id: question
+      names: ["frage"]
+      priority: required
+      predicate: is_theorem_paragraph
+
+    - id: answer
+      names: ["antwort"]
+      priority: required
+      predicate: is_theorem_paragraph
+
+    - id: kind
+      names: ["typ"]
+      priority: optional
+      predicate: is_plain_text
+
+    - id: indent_mode
+      names: ["eingerückt"]
+      priority: optional
+      predicate: is_plain_text
+
 - id: Theorem
   names: [":Mathe für Nicht-Freaks: Vorlage:Satz"]
   description: A theorem block.
