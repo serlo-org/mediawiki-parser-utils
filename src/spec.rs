@@ -72,6 +72,24 @@ pub fn is_negative_switch(elems: &[Element]) -> PredResult {
     };
 }
 
+/// Special predicate for navigation template. Only the two variants
+/// {{#invoke:Mathe für Nicht-Freaks: Seite|oben}} und
+/// {{#invoke:Mathe für Nicht-Freaks: Seite|unten}} are allowed.
+pub fn is_navigation_spec(elems: &[Element]) -> PredResult {
+    match elems {
+        [Element::Text(Text { text, .. })] if text == "oben" || text == "unten"
+            => return Ok(()),
+        _ => return Err(PredError {
+            tree: None,
+            cause: "Wrong formatting for the navigation. For the header only \
+                    the variant \
+                    \"{{#invoke:Mathe für Nicht-Freaks/Seite|oben}}\" is \
+                    allowed. The footer only admits the code \
+                    \"{{#invoke:Mathe für Nicht-Freaks/Seite|unten}}\".".into(),
+        }),
+    };
+}
+
 fn get_template_spec(template: &Template) -> Result<TemplateSpec, PredError> {
     let name = extract_plain_text(&template.name);
     if let Some(spec) = spec_of(&name) {

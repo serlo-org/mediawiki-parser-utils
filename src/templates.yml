@@ -359,4 +359,4 @@
     - id: kind
       names: ["1"]
       priority: required
-      predicate: is_plain_text
+      predicate: is_navigation_spec
