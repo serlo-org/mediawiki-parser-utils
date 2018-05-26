@@ -211,7 +211,7 @@
         The proof for this exercise.
 
 - id: Hint
-  names: [":Mathe für Nicht-Freaks: Vorlage:Hinweis"]
+  names: [":Mathe für Nicht-Freaks: Vorlage:Hinweis", "Hinweis"]
   description: A hint for the reader.
   format: block
   attributes:
@@ -222,7 +222,7 @@
       description: The content of this hint.
 
 - id: Warning
-  names: [":Mathe für Nicht-Freaks: Vorlage:Warnung"]
+  names: [":Mathe für Nicht-Freaks: Vorlage:Warnung", "Warnung"]
   description: A warning for the reader.
   format: block
   attributes:
