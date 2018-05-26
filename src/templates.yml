@@ -17,23 +17,13 @@
   description: |
     Anchors mark reference points in an article.
 
-    The argument this anchor is given should be the same as used for 
+    The argument this anchor is given should be the same as used for
     the reference later.
   format: inline
   attributes:
     - id: ref1
       names: ["1"]
       priority: required
-      predicate: is_plain_text
-
-    - id: ref2
-      names: ["2"]
-      priority: optional
-      predicate: is_plain_text
-
-    - id: ref3
-      names: ["3"]
-      priority: optional
       predicate: is_plain_text
 
 - id: Mainarticle
