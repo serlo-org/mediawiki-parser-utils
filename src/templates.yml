@@ -323,3 +323,15 @@
       names: ["beweis6"]
       priority: optional
       predicate: is_theorem_paragraph
+
+- id: Navigation
+  names: ["#invoke:Mathe für Nicht-Freaks/Seite"]
+  description: >
+    Template for including a navigation element (a header or a footer) in an
+    article.
+  format: block
+  attributes:
+    - id: kind
+      names: ["1"]
+      priority: required
+      predicate: is_plain_text
