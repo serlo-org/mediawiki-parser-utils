@@ -265,4 +265,61 @@
       priority: required
       predicate: is_text_only_paragraph
 
+- id: ProofByCases
+  names: [":Mathe für Nicht-Freaks: Vorlage:Fallunterscheidung"]
+  description: A proof by cases.
+  format: block
+  attributes:
+    - id: case1
+      names: ["fall1"]
+      priority: required
+      predicate: is_text_only_paragraph
+    - id: proof1
+      names: ["beweis1"]
+      priority: required
+      predicate: is_theorem_paragraph
 
+    - id: case2
+      names: ["fall2"]
+      priority: required
+      predicate: is_text_only_paragraph
+    - id: proof2
+      names: ["beweis2"]
+      priority: required
+      predicate: is_theorem_paragraph
+
+    - id: case3
+      names: ["fall3"]
+      priority: optional
+      predicate: is_text_only_paragraph
+    - id: proof3
+      names: ["beweis3"]
+      priority: optional
+      predicate: is_theorem_paragraph
+
+    - id: case4
+      names: ["fall4"]
+      priority: optional
+      predicate: is_text_only_paragraph
+    - id: proof4
+      names: ["beweis4"]
+      priority: optional
+      predicate: is_theorem_paragraph
+
+    - id: case5
+      names: ["fall5"]
+      priority: optional
+      predicate: is_text_only_paragraph
+    - id: proof5
+      names: ["beweis5"]
+      priority: optional
+      predicate: is_theorem_paragraph
+
+    - id: case6
+      names: ["fall6"]
+      priority: optional
+      predicate: is_text_only_paragraph
+    - id: proof6
+      names: ["beweis6"]
+      priority: optional
+      predicate: is_theorem_paragraph
