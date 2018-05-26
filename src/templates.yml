@@ -342,6 +342,50 @@
       predicate: is_text_only_paragraph
       description: The proof for the specified goal.
 
+- id: Induction
+  names: [":Mathe für Nicht-Freaks: Vorlage:Vollständige Induktion",
+          ":Aufgabensammlung: Vorlage:Vollständige Induktion"]
+  description: A proof by induction.
+  format: block
+  attributes:
+    - id: basic_set
+      names: ["erfuellungsmenge"]
+      priority: optional
+      predicate: is_text_only_paragraph
+      description: |
+        The set of all objects for which a statement shall be proved by
+        induction.
+
+    - id: statement
+      names: ["aussageform"]
+      priority: required
+      predicate: is_theorem_paragraph
+      description: The statement which shall be proved by induction.
+
+    - id: base_case
+      names: ["induktionsanfang"]
+      priority: required
+      predicate: is_theorem_paragraph
+      description: The proof of the base case for the induction.
+
+    - id: induction_hypothesis
+      names: ["induktionsvoraussetzung"]
+      priority: required
+      predicate: is_theorem_paragraph
+      description: The hypothesis of the step case.
+
+    - id: step_case_goal
+      names: ["induktionsbehauptung"]
+      priority: required
+      predicate: is_theorem_paragraph
+      description: The goal of the step case.
+
+    - id: step_case
+      names: ["beweis_induktionsschritt"]
+      priority: required
+      predicate: is_theorem_paragraph
+      description: The proof of the step case.
+
 - id: ProofByCases
   names: [":Mathe für Nicht-Freaks: Vorlage:Fallunterscheidung"]
   description: A proof by cases.
