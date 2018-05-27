@@ -8,7 +8,7 @@
   format: inline
   attributes:
     - id: formula
-      names: ["1"]
+      names: ["1", "formel"]
       priority: required
       predicate: is_math_tag
       description: The formula defined in this environment.
