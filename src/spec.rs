@@ -171,3 +171,8 @@ pub fn is_text_only_paragraph(elems: &[Element]) -> PredResult {
     };
     always(elems, &shallow)
 }
+
+/// Admits anything
+pub fn everything_is_allowed(elems: &[Element]) -> PredResult {
+    return Ok(());
+}

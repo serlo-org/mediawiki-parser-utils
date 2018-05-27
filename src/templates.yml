@@ -40,6 +40,17 @@
       description: |
         The name of the article which covers more deeply the current content.
 
+- id: Todo
+  names: ["todo"]
+  description: A remark for a task which need to be done in an article.
+  format: block
+  attributes:
+    - id: todo
+      names: ["1"]
+      priority: required
+      predicate: everything_is_allowed
+      description: The content of the todo remark.
+
 - id: Important
   names: ["-"]
   description: Environment for highlighting an important block of text.
