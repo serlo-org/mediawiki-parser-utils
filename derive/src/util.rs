@@ -7,7 +7,7 @@ use std::path::{Path};
 use syn::{Attribute, DeriveInput, Ident, Lit, Meta};
 
 pub fn parse_derive(ast: &DeriveInput) -> (Ident, String) {
-    let name = ast.ident;
+    let name = ast.ident.clone();
 
     let grammar: Vec<&Attribute> = ast.attrs
         .iter()

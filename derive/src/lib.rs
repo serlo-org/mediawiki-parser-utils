@@ -15,9 +15,7 @@ extern crate serde_derive;
 
 use std::env;
 use std::path::{Path};
-use proc_macro::{TokenStream};
-use proc_macro2::{Span};
-use quote::{Tokens};
+use proc_macro2::{Span, TokenStream};
 use syn::{DeriveInput, Ident, LitStr};
 
 mod spec;
@@ -52,18 +50,18 @@ fn check_template(template: &SpecTemplate) -> (Ident, Vec<LitStr>, Ident, LitStr
         }
     }
 
-    let name: Ident = Ident::from(template.identifier.clone());
+    let name: Ident = Ident::new(&template.identifier, Span::call_site());
     let names = str_to_lower_lit(&template.names);
     let format = match template.format {
-        SpecFormat::Inline => Ident::from("Inline"),
-        SpecFormat::Block => Ident::from("Block"),
-        SpecFormat::Box => Ident::from("Box"),
+        SpecFormat::Inline => Ident::new("Inline", Span::call_site()),
+        SpecFormat::Block => Ident::new("Block", Span::call_site()),
+        SpecFormat::Box => Ident::new("Box", Span::call_site()),
     };
     let description = LitStr::new(&template.description, Span::call_site());
     (name, names, format, description)
 }
 
-fn implement_template_id(templates: &[SpecTemplate]) -> Tokens {
+fn implement_template_id(templates: &[SpecTemplate]) -> TokenStream {
     let variants: Vec<Ident> = templates.iter().map(|template| {
         let (name, _, _, _) = check_template(template);
         name
@@ -108,16 +106,16 @@ fn str_to_lower_lit(input: &[String]) -> Vec<LitStr> {
 
 fn priority_to_ident(prio: SpecPriority) -> Ident {
     match prio {
-        SpecPriority::Required => Ident::from("Required"),
-        SpecPriority::Optional => Ident::from("Optional"),
+        SpecPriority::Required => Ident::new("Required", Span::call_site()),
+        SpecPriority::Optional => Ident::new("Optional", Span::call_site()),
     }
 }
 
-fn implement_attribute_spec(template: &SpecTemplate) -> Vec<Tokens> {
+fn implement_attribute_spec(template: &SpecTemplate) -> Vec<TokenStream> {
     template.attributes.iter().map(|attribute| {
         let names = str_to_lower_lit(&attribute.names);
         let priority = priority_to_ident(attribute.priority);
-        let predicate = Ident::from(attribute.predicate.clone());
+        let predicate = Ident::new(&attribute.predicate, Span::call_site());
         let description = LitStr::new(&attribute.description, Span::call_site());
         let pred_name = LitStr::new(&attribute.predicate, Span::call_site());
         quote! {
@@ -132,7 +130,7 @@ fn implement_attribute_spec(template: &SpecTemplate) -> Vec<Tokens> {
     }).collect()
 }
 
-fn implement_spec_list(templates: &[SpecTemplate]) -> Tokens {
+fn implement_spec_list(templates: &[SpecTemplate]) -> TokenStream {
     let specs = templates.iter().map(|template| {
         let (_, names, format, description) = check_template(template);
         let attributes = implement_attribute_spec(template);
@@ -153,10 +151,10 @@ fn implement_spec_list(templates: &[SpecTemplate]) -> Tokens {
     }
 }
 
-fn implement_parsing_match(template: &SpecTemplate) -> Tokens {
+fn implement_parsing_match(template: &SpecTemplate) -> TokenStream {
     let (name, names, format, description) = check_template(template);
     let attributes = template.attributes.iter().map(|attr| {
-        let attr_name = Ident::from(attr.identifier.clone());
+        let attr_name = Ident::new(&attr.identifier, Span::call_site());
         let alt_names = str_to_lower_lit(&attr.names);
         match attr.priority {
             SpecPriority::Required => quote! {
@@ -207,7 +205,7 @@ fn implement_parsing_match(template: &SpecTemplate) -> Tokens {
     }
 }
 
-fn implement_template_parsing(templates: &[SpecTemplate]) -> Tokens {
+fn implement_template_parsing(templates: &[SpecTemplate]) -> TokenStream {
 
     let template_kinds = templates.iter()
         .map(|t| implement_parsing_match(t));
@@ -231,14 +229,14 @@ fn implement_template_parsing(templates: &[SpecTemplate]) -> Tokens {
     }
 }
 
-fn implement_templates(templates: &[SpecTemplate]) -> Vec<Tokens> {
+fn implement_templates(templates: &[SpecTemplate]) -> Vec<TokenStream> {
     templates.iter().map(|template| {
 
         let (name, names, _, _) = check_template(template);
         let description = template.description.split('\n')
             .map(|l| LitStr::new(&l, Span::call_site()));
         let attribute_impls = template.attributes.iter().map(|attr| {
-            let attr_id: Ident = Ident::from(attr.identifier.clone());
+            let attr_id: Ident = Ident::new(&attr.identifier, Span::call_site());
             let description = attr.description.split('\n')
                 .map(|l| LitStr::new(&l, Span::call_site()));
             match attr.priority {
@@ -271,9 +269,9 @@ fn implement_templates(templates: &[SpecTemplate]) -> Vec<Tokens> {
 }
 
 #[proc_macro_derive(TemplateSpec, attributes(spec))]
-pub fn create_template_spec(input: TokenStream) -> TokenStream {
+pub fn create_template_spec(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
 
-    let ast: DeriveInput = syn::parse(input).unwrap();
+    let ast: DeriveInput = syn::parse(input.into()).unwrap();
     let (_name, path) = parse_derive(&ast);
 
     let root = env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| ".".into());
