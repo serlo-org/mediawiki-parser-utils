@@ -77,7 +77,7 @@
     - id: content
       names: ["1"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: The important content.
 
 - id: Definition
@@ -89,13 +89,13 @@
     - id: title
       names: ["titel"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: Name of the mathematical concept which is defined.
 
     - id: definition
       names: ["definition"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: The definition of the mathematical content.
 
 - id: Question
@@ -109,13 +109,13 @@
     - id: question
       names: ["frage"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The question.
 
     - id: answer
       names: ["antwort"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The answer of the question.
 
     - id: kind
@@ -138,37 +138,37 @@
     - id: title
       names: ["titel"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_plain_text
       description: Name of the mathematcial theorem.
 
     - id: theorem
       names: ["satz"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The content of the theorem.
 
     - id: explanation
       names: ["erklärung"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: An explanation for the mathematical theorem.
 
     - id: solutionprocess
       names: ["lösungsweg"]
       priority: optional
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The thought process how to find the proof of this theorem.
 
     - id: summary
       names: ["zusammenfassung"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: A summery for the proof of this theorem.
 
     - id: proof
       names: ["beweis"]
       priority: optional
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The proof for this theorem.
 
 - id: Example
@@ -179,13 +179,13 @@
     - id: title
       names: ["titel"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_plain_text
       description: A name for this example.
 
     - id: example
       names: ["beispiel"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: block_or_inline
       description: The content for this example.
 
 - id: Exercise
@@ -196,31 +196,31 @@
     - id: title
       names: ["titel"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_plain_text
       description: A name for this excersise.
 
     - id: exercise
       names: ["aufgabe"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: block_or_inline
       description: The content for this exercise.
 
     - id: explanation
       names: ["erklärung"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: block_or_inline
       description: An additional explanation for this exercise.
 
     - id: summary
       names: ["zusammenfassung"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: block_or_inline
       description: A summary for the proof or the solution for this exercise.
 
     - id: solutionprocess
       names: ["lösungsweg"]
       priority: optional
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: |
         The thought process for finding the proof or the solution of this
         exercise.
@@ -228,14 +228,14 @@
     - id: solution
       names: ["lösung"]
       priority: optional
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description:
         The solution for this exercise.
 
     - id: proof
       names: ["beweis"]
       priority: optional
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description:
         The proof for this exercise.
 
@@ -247,7 +247,7 @@
     - id: hint
       names: ["1"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: block_or_inline
       description: The content of this hint.
 
 - id: Warning
@@ -258,7 +258,7 @@
     - id: warning
       names: ["1"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: block_or_inline
       description: The content of this warning.
 
 - id: Proof
@@ -269,13 +269,13 @@
     - id: title
       names: ["titel"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_plain_text
       description: The name of the theorem which will be proved.
 
     - id: proof
       names: ["beweis"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The content of the proof.
 
 - id: SolutionProcess
@@ -287,14 +287,14 @@
     - id: title
       names: ["titel"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_plain_text
       description: |
         The title of the theorem or exercise which is going to be proved.
 
     - id: proof
       names: ["lösungsweg"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The thought process for finding the solution.
 
 - id: AlternativeProof
@@ -305,13 +305,13 @@
     - id: title
       names: ["titel"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_plain_text
       description: The name of the proof which is going to be proved.
 
     - id: proof
       names: ["beweis"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The content of the proof.
 
 - id: ProofSummary
@@ -322,13 +322,13 @@
     - id: title
       names: ["titel"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_plain_text
       description: The name of the theorem which is proved.
 
     - id: summary
       names: ["zusammenfassung"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The content of the proof summary.
 
 - id: Solution
@@ -339,13 +339,13 @@
     - id: title
       names: ["titel"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_plain_text
       description: The title of the exercise this solution has.
 
     - id: solution
       names: ["lösung"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The content of the solution.
 
 - id: ProofStep
@@ -362,13 +362,13 @@
     - id: goal
       names: ["ziel"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: The goal for this proof step.
 
     - id: step
       names: ["beweisschritt"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: block_or_inline
       description: The proof for the specified goal.
 
 - id: Induction
@@ -380,7 +380,7 @@
     - id: basic_set
       names: ["erfuellungsmenge"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: |
         The set of all objects for which a statement shall be proved by
         induction.
@@ -388,31 +388,31 @@
     - id: statement
       names: ["aussageform"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The statement which shall be proved by induction.
 
     - id: base_case
       names: ["induktionsanfang"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The proof of the base case for the induction.
 
     - id: induction_hypothesis
       names: ["induktionsvoraussetzung"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The hypothesis of the step case.
 
     - id: step_case_goal
       names: ["induktionsbehauptung"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The goal of the step case.
 
     - id: step_case
       names: ["beweis_induktionsschritt"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The proof of the step case.
 
 - id: ProofByCases
@@ -423,73 +423,73 @@
     - id: case1
       names: ["fall1"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: The goal of the 1st case.
 
     - id: proof1
       names: ["beweis1"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The proof of the 1st case.
 
     - id: case2
       names: ["fall2"]
       priority: required
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: The proof of the 2nd case.
 
     - id: proof2
       names: ["beweis2"]
       priority: required
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The proof of the 2nd case.
 
     - id: case3
       names: ["fall3"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: The proof of the 3rd case.
 
     - id: proof3
       names: ["beweis3"]
       priority: optional
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The proof of the 3rd case.
 
     - id: case4
       names: ["fall4"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: The proof of the 4th case.
 
     - id: proof4
       names: ["beweis4"]
       priority: optional
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The proof of the 4th case.
 
     - id: case5
       names: ["fall5"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: The proof of the 5th case.
 
     - id: proof5
       names: ["beweis5"]
       priority: optional
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The proof of the 5th case.
 
     - id: case6
       names: ["fall6"]
       priority: optional
-      predicate: is_text_only_paragraph
+      predicate: is_inline_only
       description: The proof of the 6th case.
 
     - id: proof6
       names: ["beweis6"]
       priority: optional
-      predicate: is_theorem_paragraph
+      predicate: block_or_inline
       description: The proof of the 6th case.
 
 - id: Navigation

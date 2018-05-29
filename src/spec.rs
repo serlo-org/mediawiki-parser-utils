@@ -47,7 +47,8 @@ pub fn is_plain_text(elems: &[Element]) -> PredResult {
             if !allowed {
                 return Err(PredError {
                     tree: Some(elem),
-                    cause: "This markup is not allowed in plain text!".into(),
+                    cause: format!("{} markup is not allowed in plain text!",
+                                   &elem.get_variant_name()),
                 });
             }
         }
@@ -101,20 +102,14 @@ fn get_template_spec(template: &Template) -> Result<TemplateSpec, PredError> {
         })
     }
 }
-/// Certain block elements are allowed in theorems.
-pub fn is_theorem_paragraph(elems: &[Element]) -> PredResult {
+
+/// This list only contains inline elements.
+pub fn is_inline_only(elems: &[Element]) -> PredResult {
     fn shallow(elems: &[Element]) -> PredResult {
         for elem in elems {
             match *elem {
                 Element::Template(ref template) => {
                     let spec = get_template_spec(template)?;
-                    // allowed templates
-                    if let Some(parsed) = parse_template(template) {
-                        match parsed {
-                            KnownTemplate::ProofStep { .. } => continue,
-                            _ => (),
-                        };
-                    }
                     if spec.format != Format::Inline {
                         return Err(PredError {
                             tree: Some(elem),
@@ -123,15 +118,19 @@ pub fn is_theorem_paragraph(elems: &[Element]) -> PredResult {
                         })
                     }
                 },
-                | Element::Heading(_)
-                | Element::Table(_)
-                | Element::TableRow(_)
-                | Element::TableCell(_)
-                => return Err(PredError {
+                Element::Text(_)
+                | Element::ExternalReference(_)
+                | Element::InternalReference(_)
+                | Element::Formatted(_)
+                | Element::Comment(_)
+                | Element::HtmlTag(_)
+                | Element::TemplateArgument(_)
+                | Element::ListItem(_)
+                => (),
+                _ => return Err(PredError {
                     tree: Some(elem),
-                    cause: "This markup is not allowed in proofs!".into()
+                    cause: format!("{} is not inline only!", &elem.get_variant_name())
                 }),
-                _ => (),
             }
         }
         Ok(())
@@ -139,32 +138,41 @@ pub fn is_theorem_paragraph(elems: &[Element]) -> PredResult {
     always(elems, &shallow)
 }
 
-/// Pragraphs with only formatted text content (no block content).
-pub fn is_text_only_paragraph(elems: &[Element]) -> PredResult {
-    fn shallow(elements: &[Element]) -> PredResult {
-        for elem in elements {
+
+/// This list only contains block or inline elements.
+pub fn block_or_inline(elems: &[Element]) -> PredResult {
+    fn shallow(elems: &[Element]) -> PredResult {
+        for elem in elems {
             match *elem {
                 Element::Template(ref template) => {
                     let spec = get_template_spec(template)?;
-                    if spec.format != Format::Inline {
+                    if spec.format != Format::Inline && spec.format != Format::Block {
                         return Err(PredError {
                             tree: Some(elem),
-                            cause: format!("\"{}\" is not an inline template!",
+                            cause: format!("\"{}\" is not a block or inline template!",
                                 &extract_plain_text(&template.name))
                         })
                     }
                 },
-                Element::Gallery(_)
-                | Element::Heading(_)
+                Element::Text(_)
+                | Element::ExternalReference(_)
+                | Element::InternalReference(_)
+                | Element::Formatted(_)
+                | Element::Comment(_)
+                | Element::HtmlTag(_)
                 | Element::Table(_)
                 | Element::TableRow(_)
                 | Element::TableCell(_)
-                | Element::InternalReference(_)
-                => return Err(PredError {
+                | Element::Paragraph(_)
+                | Element::List(_)
+                | Element::ListItem(_)
+                | Element::Gallery(_)
+                | Element::Error(_)
+                => (),
+                _ => return Err(PredError {
                     tree: Some(elem),
-                    cause: "This markup is not text-only!".into()
+                    cause: format!("{} is not inline only!", &elem.get_variant_name())
                 }),
-                _ => (),
             }
         }
         Ok(())
