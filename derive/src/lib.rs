@@ -57,6 +57,7 @@ fn check_template(template: &SpecTemplate) -> (Ident, Vec<LitStr>, Ident, LitStr
     let format = match template.format {
         SpecFormat::Inline => Ident::from("Inline"),
         SpecFormat::Block => Ident::from("Block"),
+        SpecFormat::Box => Ident::from("Box"),
     };
     let description = LitStr::new(&template.description, Span::call_site());
     (name, names, format, description)
@@ -117,13 +118,15 @@ fn implement_attribute_spec(template: &SpecTemplate) -> Vec<Tokens> {
         let names = str_to_lower_lit(&attribute.names);
         let priority = priority_to_ident(attribute.priority);
         let predicate = Ident::from(attribute.predicate.clone());
+        let description = LitStr::new(&attribute.description, Span::call_site());
         let pred_name = LitStr::new(&attribute.predicate, Span::call_site());
         quote! {
             AttributeSpec {
                 names: vec![ #( #names.into() ),*],
                 priority: Priority::#priority,
                 predicate: &#predicate,
-                predicate_name: #pred_name.into()
+                predicate_name: #pred_name.into(),
+                description: #description.into(),
             }
         }
     }).collect()
@@ -236,9 +239,17 @@ fn implement_templates(templates: &[SpecTemplate]) -> Vec<Tokens> {
             .map(|l| LitStr::new(&l, Span::call_site()));
         let attribute_impls = template.attributes.iter().map(|attr| {
             let attr_id: Ident = Ident::from(attr.identifier.clone());
+            let description = attr.description.split('\n')
+                .map(|l| LitStr::new(&l, Span::call_site()));
             match attr.priority {
-                SpecPriority::Required => quote! { pub #attr_id: &'e [Element] },
-                SpecPriority::Optional => quote! { pub #attr_id: Option<&'e [Element]> },
+                SpecPriority::Required => quote! {
+                    #( #[doc = #description] )*
+                    pub #attr_id: &'e [Element]
+                },
+                SpecPriority::Optional => quote! {
+                    #( #[doc = #description] )*
+                    pub #attr_id: Option<&'e [Element]>
+                },
             }
         });
 
@@ -292,6 +303,7 @@ pub fn create_template_spec(input: TokenStream) -> TokenStream {
             #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
             pub enum Format {
                 Block,
+                Box,
                 Inline
             }
 
@@ -365,6 +377,7 @@ pub fn create_template_spec(input: TokenStream) -> TokenStream {
             #[derive(Clone, Serialize)]
             pub struct AttributeSpec<'p> {
                 pub names: Vec<String>,
+                pub description: String,
                 pub priority: Priority,
                 #[serde(skip)]
                 pub predicate: &'p Predicate,

@@ -3,6 +3,7 @@
 #[serde(rename_all = "lowercase")]
 pub enum SpecFormat {
     Block,
+    Box,
     Inline
 }
 
@@ -27,6 +28,7 @@ pub struct SpecTemplate {
 pub struct SpecAttribute {
     #[serde(rename = "id")]
     pub identifier: String,
+    pub description: String,
     pub names: Vec<String>,
     pub priority: SpecPriority,
     pub predicate: String,
