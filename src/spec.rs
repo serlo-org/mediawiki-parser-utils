@@ -122,6 +122,7 @@ pub fn is_inline_only(elems: &[Element]) -> PredResult {
                 | Element::ExternalReference(_)
                 | Element::InternalReference(_)
                 | Element::Formatted(_)
+                | Element::Paragraph(_)
                 | Element::Comment(_)
                 | Element::HtmlTag(_)
                 | Element::TemplateArgument(_)
