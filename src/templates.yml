@@ -150,7 +150,7 @@
     - id: explanation
       names: ["erklärung"]
       priority: optional
-      predicate: is_inline_only
+      predicate: block_or_inline
       description: An explanation for the mathematical theorem.
 
     - id: solutionprocess
@@ -162,8 +162,8 @@
     - id: summary
       names: ["zusammenfassung"]
       priority: optional
-      predicate: is_inline_only
-      description: A summery for the proof of this theorem.
+      predicate: block_or_inline
+      description: A summary for the proof of this theorem.
 
     - id: proof
       names: ["beweis"]
@@ -506,3 +506,22 @@
       description: |
         The kind of the navigational element. "oben" for the header and "unten"
         for the footer.
+
+- id: Smiley
+  names: ["Smiley"]
+  description: >
+      Insert a smiley. Please only use the text description for consistency.
+  format: inline
+  attributes:
+    - id: name
+      names: ["1"]
+      priority: optional
+      predicate: is_plain_text
+      description: |
+        The smiley name like "smile", "wink", "cool", ...
+    - id: size
+      names: ["2"]
+      priority: optional
+      predicate: is_plain_text
+      description: |
+        The smiley size in pixels.
