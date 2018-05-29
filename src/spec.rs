@@ -156,6 +156,7 @@ pub fn block_or_inline(elems: &[Element]) -> PredResult {
                     }
                 },
                 Element::Text(_)
+                | Element::TemplateArgument(_)
                 | Element::ExternalReference(_)
                 | Element::InternalReference(_)
                 | Element::Formatted(_)
@@ -172,7 +173,7 @@ pub fn block_or_inline(elems: &[Element]) -> PredResult {
                 => (),
                 _ => return Err(PredError {
                     tree: Some(elem),
-                    cause: format!("{} is not inline only!", &elem.get_variant_name())
+                    cause: format!("{} is not block/ inline!", &elem.get_variant_name())
                 }),
             }
         }
