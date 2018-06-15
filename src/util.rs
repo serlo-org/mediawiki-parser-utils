@@ -61,6 +61,7 @@ pub fn extract_plain_text(content: &[Element]) -> String {
     result
 }
 
+/// Result of checking a formula.
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub enum TexResult {
     Ok(String),
@@ -70,10 +71,12 @@ pub enum TexResult {
     UnknownError,
 }
 
+/// Checks if a string is a valid LaTeX formula.
 pub trait TexChecker {
     fn check(&self, source: &str) -> TexResult;
 }
 
+/// Checks if a string is a valid LaTeX formula, caching past inputs.
 #[derive(Debug)]
 pub struct CachedTexChecker {
     pub texvccheck_path: PathBuf,
