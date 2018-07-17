@@ -5,7 +5,14 @@ extern crate mediawiki_parser;
 extern crate serde_derive;
 
 #[macro_use]
+#[cfg(test)]
+extern crate mwparser_utils_derive;
+
+#[macro_use]
 mod util;
 pub mod transformations;
+
+#[cfg(test)]
+mod test;
 
 pub use util::*;

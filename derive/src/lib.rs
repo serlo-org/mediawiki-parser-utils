@@ -294,8 +294,15 @@ pub fn create_template_spec(input: proc_macro::TokenStream) -> proc_macro::Token
     let template_parsing = implement_template_parsing(&templates);
 
     let implementation = quote! {
+
+        use mediawiki_parser::{Element, Template};
+
         /// Types and utils used in the documentation.
         pub mod spec_meta {
+
+            use std::io;
+            use mediawiki_parser::{Element, Traversion};
+
             /// Specifies wether a template represents a logical unit (`Block`)
             /// or simpler markup (`Inline`).
             #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
@@ -407,7 +414,7 @@ pub fn create_template_spec(input: proc_macro::TokenStream) -> proc_macro::Token
             }
         }
 
-        use spec_meta::*;
+        use self::spec_meta::*;
 
         /// Get the specification of a specific template, if it exists.
         pub fn spec_of<'p>(name: &str) -> Option<TemplateSpec<'p>> {
