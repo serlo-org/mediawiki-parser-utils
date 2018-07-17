@@ -1,0 +1,18 @@
+# Simple test spec for testing derive macro.
+
+- id: Example
+  names: ["example"]
+  description: A mathematical example.
+  format: box
+  attributes:
+    - id: title
+      names: ["title"]
+      priority: optional
+      predicate: nop_pred
+      description: A name for this example.
+
+    - id: example
+      names: ["example"]
+      priority: required
+      predicate: nop_pred
+      description: The content for this example.
