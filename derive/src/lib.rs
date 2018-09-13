@@ -153,6 +153,7 @@ fn implement_spec_list(templates: &[SpecTemplate]) -> TokenStream {
 
 fn implement_parsing_match(template: &SpecTemplate) -> TokenStream {
     let (name, names, format, description) = check_template(template);
+    let ident_str = LitStr::new(&template.identifier, Span::call_site());
     let attributes = template.attributes.iter().map(|attr| {
         let attr_name = Ident::new(&attr.identifier, Span::call_site());
         let alt_names = str_to_lower_lit(&attr.names);
@@ -190,6 +191,7 @@ fn implement_parsing_match(template: &SpecTemplate) -> TokenStream {
         let names = vec![#( #names.trim().to_lowercase() ),*];
         if names.contains(&name) {
             let template = #name {
+                identifier: #ident_str.into(),
                 names: names,
                 description: #description.into(),
                 format: Format::#format,
@@ -235,7 +237,6 @@ fn implement_templates(templates: &[SpecTemplate]) -> Vec<TokenStream> {
         let (name, names, _, _) = check_template(template);
         let description = template.description.split('\n')
             .map(|l| LitStr::new(&l, Span::call_site()));
-        let identifier = LitStr::new(&template.identifier, Span::call_site());
         let attribute_impls = template.attributes.iter().map(|attr| {
             let attr_id: Ident = Ident::new(&attr.identifier, Span::call_site());
             let description = attr.description.split('\n')
@@ -259,7 +260,7 @@ fn implement_templates(templates: &[SpecTemplate]) -> Vec<TokenStream> {
             /// Alternative names:
             #( #[doc = #names ] )*
             pub struct #name<'e> {
-                pub identifier: #identifier,
+                pub identifier: String,
                 pub names: Vec<String>,
                 pub format: Format,
                 pub description: String,
