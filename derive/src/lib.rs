@@ -235,6 +235,7 @@ fn implement_templates(templates: &[SpecTemplate]) -> Vec<TokenStream> {
         let (name, names, _, _) = check_template(template);
         let description = template.description.split('\n')
             .map(|l| LitStr::new(&l, Span::call_site()));
+        let identifier = LitStr::new(&template.identifier, Span::call_site());
         let attribute_impls = template.attributes.iter().map(|attr| {
             let attr_id: Ident = Ident::new(&attr.identifier, Span::call_site());
             let description = attr.description.split('\n')
@@ -258,6 +259,7 @@ fn implement_templates(templates: &[SpecTemplate]) -> Vec<TokenStream> {
             /// Alternative names:
             #( #[doc = #names ] )*
             pub struct #name<'e> {
+                pub identifier: #identifier,
                 pub names: Vec<String>,
                 pub format: Format,
                 pub description: String,
