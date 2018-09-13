@@ -71,7 +71,11 @@ fn implement_template_id(templates: &[SpecTemplate]) -> TokenStream {
             #name(#name<'e>)
         }
     );
-    let present_variants = variants.iter();
+    let id_variants = variants.iter();
+    let dsc_variants = variants.iter();
+    let names_variants = variants.iter();
+    let p_variants = variants.iter();
+
     quote! {
         /// The available template types.
         #[derive(Debug, Clone, PartialEq, Serialize)]
@@ -80,9 +84,24 @@ fn implement_template_id(templates: &[SpecTemplate]) -> TokenStream {
         }
 
         impl<'e> KnownTemplate<'e> {
+            pub fn identifier(&self) -> &str {
+                 match *self {
+                    #( KnownTemplate::#id_variants(ref t) => &t.identifier ),*
+                }
+            }
+            pub fn description(&self) -> &str {
+                 match *self {
+                    #( KnownTemplate::#dsc_variants(ref t) => &t.description ),*
+                }
+            }
+            pub fn names(&self) -> &Vec<String> {
+                 match *self {
+                    #( KnownTemplate::#names_variants(ref t) => &t.names ),*
+                }
+            }
             pub fn present(&self) -> &Vec<Attribute<'e>> {
                 match *self {
-                    #( KnownTemplate::#present_variants(ref t) => &t.present ),*
+                    #( KnownTemplate::#p_variants(ref t) => &t.present ),*
                 }
             }
             pub fn find(&self, name: &str) -> Option<&Attribute<'e>> {
