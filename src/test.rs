@@ -1,12 +1,10 @@
-use util::{find_arg, extract_plain_text};
+use crate::util::{extract_plain_text, find_arg};
+use mwparser_utils_derive::template_spec;
+
+const _SPEC: &str = include_str!("test_spec.yml");
 
 fn nop_pred<'s>(_: &'s [Element]) -> PredResult<'s> {
     Ok(())
 }
 
-const _SPEC: &str = include_str!("test_spec.yml");
-
-#[derive(TemplateSpec)]
-#[spec = "test_spec.yml"]
-struct _Test;
-
+template_spec!("src/test_spec.yml");

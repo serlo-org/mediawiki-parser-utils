@@ -5,48 +5,55 @@
 
 extern crate proc_macro;
 extern crate proc_macro2;
-extern crate syn;
-#[macro_use]
-extern crate quote;
-extern crate serde;
-extern crate serde_yaml;
-#[macro_use]
-extern crate serde_derive;
-
-use std::env;
-use std::path::{Path};
 use proc_macro2::{Span, TokenStream};
-use syn::{DeriveInput, Ident, LitStr};
+use quote::quote;
+use std::env;
+use std::fs;
+use std::io;
+use std::io::Read;
+use std::path::Path;
+use syn::{Ident, LitStr};
 
 mod spec;
-mod util;
 
-use util::*;
-use spec::{SpecTemplate, SpecPriority, SpecFormat};
+use crate::spec::{SpecFormat, SpecPriority, SpecTemplate};
 
 fn check_template(template: &SpecTemplate) -> (Ident, Vec<LitStr>, Ident, LitStr) {
-    let first_uppercase = template.identifier.chars().next()
-        .map(|c| c.is_uppercase()).unwrap_or(false);
+    let first_uppercase = template
+        .identifier
+        .chars()
+        .next()
+        .map(|c| c.is_uppercase())
+        .unwrap_or(false);
 
     if !first_uppercase {
-        panic!("first character of identifier {:?} \
-            should be uppercase!", template.identifier);
+        panic!(
+            "first character of identifier {:?} \
+             should be uppercase!",
+            template.identifier
+        );
     }
 
     if template.names.is_empty() {
-        panic!("{:?}: templates must have at least one name!",
-               template.identifier);
+        panic!(
+            "{:?}: templates must have at least one name!",
+            template.identifier
+        );
     }
 
     for child in &template.attributes {
         if child.identifier.chars().any(|c| c.is_uppercase()) {
-            panic!("{:?}: attribute identifiers should be lowercase!",
-                child.identifier)
+            panic!(
+                "{:?}: attribute identifiers should be lowercase!",
+                child.identifier
+            )
         }
 
         if child.names.is_empty() {
-            panic!("{:?}: attributes must have at least one name!",
-                   child.identifier);
+            panic!(
+                "{:?}: attributes must have at least one name!",
+                child.identifier
+            );
         }
     }
 
@@ -62,15 +69,18 @@ fn check_template(template: &SpecTemplate) -> (Ident, Vec<LitStr>, Ident, LitStr
 }
 
 fn implement_template_id(templates: &[SpecTemplate]) -> TokenStream {
-    let variants: Vec<Ident> = templates.iter().map(|template| {
-        let (name, _, _, _) = check_template(template);
-        name
-    }).collect();
-    let enum_variants = variants.iter().map(|name|
+    let variants: Vec<Ident> = templates
+        .iter()
+        .map(|template| {
+            let (name, _, _, _) = check_template(template);
+            name
+        })
+        .collect();
+    let enum_variants = variants.iter().map(|name| {
         quote! {
             #name(#name<'e>)
         }
-    );
+    });
     let id_variants = variants.iter();
     let dsc_variants = variants.iter();
     let names_variants = variants.iter();
@@ -131,22 +141,26 @@ fn priority_to_ident(prio: SpecPriority) -> Ident {
 }
 
 fn implement_attribute_spec(template: &SpecTemplate) -> Vec<TokenStream> {
-    template.attributes.iter().map(|attribute| {
-        let names = str_to_lower_lit(&attribute.names);
-        let priority = priority_to_ident(attribute.priority);
-        let predicate = Ident::new(&attribute.predicate, Span::call_site());
-        let description = LitStr::new(&attribute.description, Span::call_site());
-        let pred_name = LitStr::new(&attribute.predicate, Span::call_site());
-        quote! {
-            AttributeSpec {
-                names: vec![ #( #names.into() ),*],
-                priority: Priority::#priority,
-                predicate: &#predicate,
-                predicate_name: #pred_name.into(),
-                description: #description.into(),
+    template
+        .attributes
+        .iter()
+        .map(|attribute| {
+            let names = str_to_lower_lit(&attribute.names);
+            let priority = priority_to_ident(attribute.priority);
+            let predicate = Ident::new(&attribute.predicate, Span::call_site());
+            let description = LitStr::new(&attribute.description, Span::call_site());
+            let pred_name = LitStr::new(&attribute.predicate, Span::call_site());
+            quote! {
+                AttributeSpec {
+                    names: vec![ #( #names.into() ),*],
+                    priority: Priority::#priority,
+                    predicate: &#predicate,
+                    predicate_name: #pred_name.into(),
+                    description: #description.into(),
+                }
             }
-        }
-    }).collect()
+        })
+        .collect()
 }
 
 fn implement_spec_list(templates: &[SpecTemplate]) -> TokenStream {
@@ -189,7 +203,7 @@ fn implement_parsing_match(template: &SpecTemplate) -> TokenStream {
             },
             SpecPriority::Optional => quote! {
                 #attr_name: extract_content(&[ #( #alt_names.into() ),* ])
-            }
+            },
         }
     });
     let present = template.attributes.iter().map(|attr| {
@@ -227,9 +241,7 @@ fn implement_parsing_match(template: &SpecTemplate) -> TokenStream {
 }
 
 fn implement_template_parsing(templates: &[SpecTemplate]) -> TokenStream {
-
-    let template_kinds = templates.iter()
-        .map(|t| implement_parsing_match(t));
+    let template_kinds = templates.iter().map(|t| implement_parsing_match(t));
 
     quote! {
         /// Try to create a `KnownTemplate` variant from an element, using the specification.
@@ -251,64 +263,75 @@ fn implement_template_parsing(templates: &[SpecTemplate]) -> TokenStream {
 }
 
 fn implement_templates(templates: &[SpecTemplate]) -> Vec<TokenStream> {
-    templates.iter().map(|template| {
-
-        let (name, names, _, _) = check_template(template);
-        let description = template.description.split('\n')
-            .map(|l| LitStr::new(&l, Span::call_site()));
-        let attribute_impls = template.attributes.iter().map(|attr| {
-            let attr_id: Ident = Ident::new(&attr.identifier, Span::call_site());
-            let description = attr.description.split('\n')
+    templates
+        .iter()
+        .map(|template| {
+            let (name, names, _, _) = check_template(template);
+            let description = template
+                .description
+                .split('\n')
                 .map(|l| LitStr::new(&l, Span::call_site()));
-            match attr.priority {
-                SpecPriority::Required => quote! {
-                    #( #[doc = #description] )*
-                    pub #attr_id: &'e [Element]
-                },
-                SpecPriority::Optional => quote! {
-                    #( #[doc = #description] )*
-                    pub #attr_id: Option<&'e [Element]>
-                },
-            }
-        });
+            let attribute_impls = template.attributes.iter().map(|attr| {
+                let attr_id: Ident = Ident::new(&attr.identifier, Span::call_site());
+                let description = attr
+                    .description
+                    .split('\n')
+                    .map(|l| LitStr::new(&l, Span::call_site()));
+                match attr.priority {
+                    SpecPriority::Required => quote! {
+                        #( #[doc = #description] )*
+                        pub #attr_id: &'e [Element]
+                    },
+                    SpecPriority::Optional => quote! {
+                        #( #[doc = #description] )*
+                        pub #attr_id: Option<&'e [Element]>
+                    },
+                }
+            });
 
-        quote! {
-            #[derive(Debug, Clone, PartialEq, Serialize)]
-            #( #[doc = #description] )*
-            ///
-            /// Alternative names:
-            #( #[doc = #names ] )*
-            pub struct #name<'e> {
-                pub identifier: String,
-                pub names: Vec<String>,
-                pub format: Format,
-                pub description: String,
-                pub present: Vec<Attribute<'e>>,
-                # (#attribute_impls ),*
+            quote! {
+                #[derive(Debug, Clone, PartialEq, Serialize)]
+                #( #[doc = #description] )*
+                ///
+                /// Alternative names:
+                #( #[doc = #names ] )*
+                pub struct #name<'e> {
+                    pub identifier: String,
+                    pub names: Vec<String>,
+                    pub format: Format,
+                    pub description: String,
+                    pub present: Vec<Attribute<'e>>,
+                    # (#attribute_impls ),*
+                }
             }
-        }
-    }).collect()
+        })
+        .collect()
 }
 
-#[proc_macro_derive(TemplateSpec, attributes(spec))]
-pub fn create_template_spec(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+fn read_file<P: AsRef<Path>>(path: P) -> io::Result<String> {
+    let mut file = fs::File::open(path.as_ref())?;
+    let mut string = String::new();
+    file.read_to_string(&mut string)?;
+    Ok(string)
+}
 
-    let ast: DeriveInput = syn::parse(input.into()).unwrap();
-    let (_name, path) = parse_derive(&ast);
+#[proc_macro]
+pub fn template_spec(input: proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let path_lit: LitStr = syn::parse(input.into()).expect("could not parse path string!");
+    let path = path_lit.value();
 
     let root = env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| ".".into());
-    let path = Path::new(&root).join("src/").join(&path);
+    let path = Path::new(&root).join(&path);
     let file_name = match path.file_name() {
         Some(file_name) => file_name,
-        None => panic!("spec attribute should point to a file")
+        None => panic!("spec attribute should point to a file"),
     };
 
     let data = match read_file(&path) {
         Ok(data) => data,
-        Err(error) => panic!("error opening {:?}: {}", file_name, error)
+        Err(error) => panic!("error opening {:?}: {}", file_name, error),
     };
-    let templates: Vec<SpecTemplate> = serde_yaml::from_str(&data)
-        .expect("cannot parse spec:");
+    let templates: Vec<SpecTemplate> = serde_yaml::from_str(&data).expect("cannot parse spec:");
 
     let template_id = implement_template_id(&templates);
     let template_impls = implement_templates(&templates);
@@ -318,12 +341,14 @@ pub fn create_template_spec(input: proc_macro::TokenStream) -> proc_macro::Token
     let implementation = quote! {
 
         use mediawiki_parser::{Element, Template};
+        use serde_derive::{Serialize};
 
         /// Types and utils used in the documentation.
         pub mod spec_meta {
 
             use std::io;
             use mediawiki_parser::{Element, Traversion};
+            use serde_derive::{Serialize, Deserialize};
 
             /// Specifies wether a template represents a logical unit (`Block`)
             /// or simpler markup (`Inline`).
@@ -360,7 +385,15 @@ pub fn create_template_spec(input: proc_macro::TokenStream) -> proc_macro::Token
 
             impl <'e, 'p: 'e> Traversion<'e, &'p Predicate> for TreeChecker<'e, 'e> {
 
-                path_methods!('e);
+                fn path_push(&mut self, root: &'e Element) {
+                    self.path.push(root);
+                }
+                fn path_pop(&mut self) -> Option<&'e Element> {
+                    self.path.pop()
+                }
+                fn get_path(&self) -> &Vec<&'e Element> {
+                    &self.path
+                }
 
                 fn work_vec(
                     &mut self,
@@ -456,5 +489,3 @@ pub fn create_template_spec(input: proc_macro::TokenStream) -> proc_macro::Token
     };
     implementation.into()
 }
-
-

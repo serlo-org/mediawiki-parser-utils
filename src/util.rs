@@ -1,14 +1,16 @@
 //! Common utilities for mfnf tools.
 
 use mediawiki_parser::*;
+use serde_derive::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::path::PathBuf;
 use std::process::Command;
 use std::sync::Mutex;
-use std::path::PathBuf;
 
 /// Convert a filename to a make-friedly format.
 pub fn filename_to_make(input: &str) -> String {
-    input.replace(" ", "_")
+    input
+        .replace(" ", "_")
         .replace(":", "@COLON@")
         .replace("(", "@LBR@")
         .replace(")", "@RBR@")
@@ -45,16 +47,16 @@ pub fn extract_plain_text(content: &[Element]) -> String {
         match *root {
             Element::Text(ref e) => {
                 result.push_str(&e.text);
-            },
+            }
             Element::Formatted(ref e) => {
                 result.push_str(&extract_plain_text(&e.content));
-            },
+            }
             Element::Paragraph(ref e) => {
                 result.push_str(&extract_plain_text(&e.content));
-            },
+            }
             Element::TemplateArgument(ref e) => {
                 result.push_str(&extract_plain_text(&e.value));
-            },
+            }
             _ => (),
         };
     }
@@ -106,15 +108,16 @@ impl TexChecker for CachedTexChecker {
     fn check(&self, source: &str) -> TexResult {
         let mut cache = self.cache.lock().unwrap();
         if let Some(result) = cache.get(source) {
-            return result.clone()
+            return result.clone();
         }
 
-        let mut output = Command::new(&self.texvccheck_path).arg(source).output()
+        let mut output = Command::new(&self.texvccheck_path)
+            .arg(source)
+            .output()
             .expect("Failed to launch texvccheck!");
         let mut iter = output.stdout.drain(..);
         let first = iter.next();
-        let text = String::from_utf8(iter.collect())
-            .expect("Corrupted texvccheck output!");
+        let text = String::from_utf8(iter.collect()).expect("Corrupted texvccheck output!");
         let result = match first {
             Some(c) => match c as char {
                 '+' => TexResult::Ok(text),

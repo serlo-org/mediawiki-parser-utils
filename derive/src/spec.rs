@@ -1,17 +1,18 @@
+use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum SpecFormat {
     Block,
     Box,
-    Inline
+    Inline,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum SpecPriority {
     Required,
-    Optional
+    Optional,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]

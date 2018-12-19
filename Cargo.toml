@@ -2,6 +2,7 @@
 name = "mwparser_utils"
 version = "0.1.0"
 authors = ["Valentin Roland <valentin@vroland.de>"]
+edition = "2018"
 
 [dependencies]
 mediawiki_parser = "0.4"

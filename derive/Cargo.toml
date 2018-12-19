@@ -2,6 +2,7 @@
 name = "mwparser_utils_derive"
 version = "0.1.0"
 authors = ["Valentin Roland <valentin@vroland.de>"]
+edition = "2018"
 
 [lib]
 proc-macro = true
